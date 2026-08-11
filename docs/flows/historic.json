@@ -1,0 +1,745 @@
+[
+    {
+        "id": "1f4e39a3b05d7946",
+        "type": "influxdb in",
+        "z": "9a5b7c78db521126",
+        "influxdb": "7d21f27807598701",
+        "name": "nivel_carga_pct",
+        "query": "SELECT mean(nivel_carga_pct) \nFROM dt_transformador \nWHERE time > now() - 12d\n  AND time < now() - 9d\nGROUP BY time(1h) fill(previous)",
+        "rawOutput": false,
+        "precision": "",
+        "retentionPolicy": "",
+        "org": "organisation",
+        "x": 320,
+        "y": 760,
+        "wires": [
+            [
+                "1520e0f9bdaeaaa3",
+                "584b94b98c86bc20"
+            ]
+        ]
+    },
+    {
+        "id": "d94bc3f111916612",
+        "type": "inject",
+        "z": "9a5b7c78db521126",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 100,
+        "y": 760,
+        "wires": [
+            [
+                "1f4e39a3b05d7946"
+            ]
+        ]
+    },
+    {
+        "id": "584b94b98c86bc20",
+        "type": "debug",
+        "z": "9a5b7c78db521126",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 540,
+        "y": 760,
+        "wires": []
+    },
+    {
+        "id": "3b0a8f65917cbff4",
+        "type": "ui-chart",
+        "z": "9a5b7c78db521126",
+        "group": "f4c9001a65353143",
+        "name": "carga_history",
+        "label": "Carga",
+        "order": 3,
+        "chartType": "line",
+        "category": "topic",
+        "categoryType": "msg",
+        "xAxisLabel": "",
+        "xAxisProperty": "payload.x",
+        "xAxisPropertyType": "msg",
+        "xAxisType": "time",
+        "xAxisFormat": "",
+        "xAxisFormatType": "auto",
+        "xmin": "",
+        "xmax": "",
+        "yAxisLabel": "",
+        "yAxisProperty": "payload.y",
+        "yAxisPropertyType": "msg",
+        "ymin": "",
+        "ymax": "",
+        "bins": 10,
+        "action": "append",
+        "stackSeries": false,
+        "pointShape": "circle",
+        "pointRadius": "5",
+        "showLegend": false,
+        "removeOlder": "20",
+        "removeOlderUnit": "86400",
+        "removeOlderPoints": "1000",
+        "colors": [
+            "#0095ff",
+            "#ff0000",
+            "#ff7f0e",
+            "#2ca02c",
+            "#a347e1",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "textColor": [
+            "#b2bdcd"
+        ],
+        "textColorDefault": false,
+        "gridColor": [
+            "#334155"
+        ],
+        "gridColorDefault": false,
+        "width": "8",
+        "height": 8,
+        "className": "nominal",
+        "interpolation": "linear",
+        "x": 560,
+        "y": 800,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "1520e0f9bdaeaaa3",
+        "type": "function",
+        "z": "9a5b7c78db521126",
+        "name": "chart_parse",
+        "func": "let data = msg.payload;\n\ndata.forEach(p => {\n    node.send({\n        topic: \"carga\",\n        payload: {\n            x: new Date(p.time).getTime(),\n            y: p.mean\n        }\n    });\n});\n\nreturn null;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 310,
+        "y": 800,
+        "wires": [
+            [
+                "3b0a8f65917cbff4"
+            ]
+        ]
+    },
+    {
+        "id": "594409a0c985a278",
+        "type": "influxdb in",
+        "z": "9a5b7c78db521126",
+        "influxdb": "7d21f27807598701",
+        "name": "potencia_kVA",
+        "query": "SELECT mean(potencia_kVA) \nFROM dt_transformador \nWHERE time > now() - 12d\n  AND time < now() - 9d\nGROUP BY time(1h) fill(previous)",
+        "rawOutput": false,
+        "precision": "",
+        "retentionPolicy": "",
+        "org": "organisation",
+        "x": 320,
+        "y": 840,
+        "wires": [
+            [
+                "0aeb21110c01d3dc",
+                "7090308666ee9c3a"
+            ]
+        ]
+    },
+    {
+        "id": "99e192d4425b41ba",
+        "type": "inject",
+        "z": "9a5b7c78db521126",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 100,
+        "y": 840,
+        "wires": [
+            [
+                "594409a0c985a278"
+            ]
+        ]
+    },
+    {
+        "id": "7090308666ee9c3a",
+        "type": "debug",
+        "z": "9a5b7c78db521126",
+        "name": "debug 12",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 540,
+        "y": 840,
+        "wires": []
+    },
+    {
+        "id": "c2a432a8fc56e9cf",
+        "type": "ui-chart",
+        "z": "9a5b7c78db521126",
+        "group": "f4c9001a65353143",
+        "name": "Aparente_history",
+        "label": "Potencia aparente",
+        "order": 4,
+        "chartType": "line",
+        "category": "topic",
+        "categoryType": "msg",
+        "xAxisLabel": "",
+        "xAxisProperty": "payload.x",
+        "xAxisPropertyType": "msg",
+        "xAxisType": "time",
+        "xAxisFormat": "",
+        "xAxisFormatType": "auto",
+        "xmin": "",
+        "xmax": "",
+        "yAxisLabel": "",
+        "yAxisProperty": "payload.y",
+        "yAxisPropertyType": "msg",
+        "ymin": "0",
+        "ymax": "400",
+        "bins": 10,
+        "action": "append",
+        "stackSeries": false,
+        "pointShape": "circle",
+        "pointRadius": "5",
+        "showLegend": false,
+        "removeOlder": "20",
+        "removeOlderUnit": "86400",
+        "removeOlderPoints": "1000",
+        "colors": [
+            "#ff7f0e",
+            "#ff0000",
+            "#ff7f0e",
+            "#2ca02c",
+            "#a347e1",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "textColor": [
+            "#b2bdcd"
+        ],
+        "textColorDefault": false,
+        "gridColor": [
+            "#334155"
+        ],
+        "gridColorDefault": false,
+        "width": "8",
+        "height": 8,
+        "className": "nominal",
+        "interpolation": "linear",
+        "x": 570,
+        "y": 880,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "0aeb21110c01d3dc",
+        "type": "function",
+        "z": "9a5b7c78db521126",
+        "name": "chart_parse",
+        "func": "let data = msg.payload;\n\ndata.forEach(p => {\n    node.send({\n        topic: \"potAparente\",\n        payload: {\n            x: new Date(p.time).getTime(),\n            y: p.mean\n        }\n    });\n});\n\nreturn null;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 310,
+        "y": 880,
+        "wires": [
+            [
+                "c2a432a8fc56e9cf"
+            ]
+        ]
+    },
+    {
+        "id": "8ca1c8d74ecc551e",
+        "type": "influxdb in",
+        "z": "9a5b7c78db521126",
+        "influxdb": "7d21f27807598701",
+        "name": "tension_V",
+        "query": "SELECT mean(tension_V) \nFROM dt_transformador \nWHERE time > now() - 12d\n  AND time < now() - 9d \nGROUP BY time(1h) fill(previous)",
+        "rawOutput": false,
+        "precision": "",
+        "retentionPolicy": "",
+        "org": "organisation",
+        "x": 300,
+        "y": 920,
+        "wires": [
+            [
+                "81579426b13d19b3",
+                "48c7937ffe540e8e"
+            ]
+        ]
+    },
+    {
+        "id": "2039f0f6b9cca7ef",
+        "type": "inject",
+        "z": "9a5b7c78db521126",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 100,
+        "y": 920,
+        "wires": [
+            [
+                "8ca1c8d74ecc551e"
+            ]
+        ]
+    },
+    {
+        "id": "48c7937ffe540e8e",
+        "type": "debug",
+        "z": "9a5b7c78db521126",
+        "name": "debug 13",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 540,
+        "y": 920,
+        "wires": []
+    },
+    {
+        "id": "532c611532e4b99b",
+        "type": "ui-chart",
+        "z": "9a5b7c78db521126",
+        "group": "f4c9001a65353143",
+        "name": "Tensión_history",
+        "label": "Tensión Secundaria",
+        "order": 5,
+        "chartType": "line",
+        "category": "topic",
+        "categoryType": "msg",
+        "xAxisLabel": "",
+        "xAxisProperty": "payload.x",
+        "xAxisPropertyType": "msg",
+        "xAxisType": "time",
+        "xAxisFormat": "",
+        "xAxisFormatType": "auto",
+        "xmin": "",
+        "xmax": "",
+        "yAxisLabel": "",
+        "yAxisProperty": "payload.y",
+        "yAxisPropertyType": "msg",
+        "ymin": "300",
+        "ymax": "450",
+        "bins": 10,
+        "action": "append",
+        "stackSeries": false,
+        "pointShape": "circle",
+        "pointRadius": "5",
+        "showLegend": false,
+        "removeOlder": "20",
+        "removeOlderUnit": "86400",
+        "removeOlderPoints": "1000",
+        "colors": [
+            "#2ca02c",
+            "#ff0000",
+            "#ff7f0e",
+            "#2ca02c",
+            "#a347e1",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "textColor": [
+            "#b2bdcd"
+        ],
+        "textColorDefault": false,
+        "gridColor": [
+            "#334155"
+        ],
+        "gridColorDefault": false,
+        "width": "8",
+        "height": 8,
+        "className": "nominal",
+        "interpolation": "linear",
+        "x": 560,
+        "y": 960,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "81579426b13d19b3",
+        "type": "function",
+        "z": "9a5b7c78db521126",
+        "name": "chart_parse",
+        "func": "let data = msg.payload;\n\ndata.forEach(p => {\n    node.send({\n        topic: \"Tensión\",\n        payload: {\n            x: new Date(p.time).getTime(),\n            y: p.mean\n        }\n    });\n});\n\nreturn null;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 310,
+        "y": 960,
+        "wires": [
+            [
+                "532c611532e4b99b"
+            ]
+        ]
+    },
+    {
+        "id": "4789d20316e460ed",
+        "type": "influxdb in",
+        "z": "9a5b7c78db521126",
+        "influxdb": "7d21f27807598701",
+        "name": "temperatura_trafo",
+        "query": "SELECT mean(temperatura_trafo) \nFROM dt_transformador \nWHERE time > now() - 12d\n  AND time < now() - 9d \nGROUP BY time(1h) fill(previous)",
+        "rawOutput": false,
+        "precision": "",
+        "retentionPolicy": "",
+        "org": "organisation",
+        "x": 330,
+        "y": 1000,
+        "wires": [
+            [
+                "74447eda6ef7610e",
+                "eaabefc328bf978e"
+            ]
+        ]
+    },
+    {
+        "id": "77b9e625449694bb",
+        "type": "inject",
+        "z": "9a5b7c78db521126",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 100,
+        "y": 1000,
+        "wires": [
+            [
+                "4789d20316e460ed"
+            ]
+        ]
+    },
+    {
+        "id": "eaabefc328bf978e",
+        "type": "debug",
+        "z": "9a5b7c78db521126",
+        "name": "debug 14",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 540,
+        "y": 1000,
+        "wires": []
+    },
+    {
+        "id": "b3b8622f8fef4163",
+        "type": "ui-chart",
+        "z": "9a5b7c78db521126",
+        "group": "f4c9001a65353143",
+        "name": "Temperatura_history",
+        "label": "Temperatura Interna",
+        "order": 2,
+        "chartType": "line",
+        "category": "topic",
+        "categoryType": "msg",
+        "xAxisLabel": "",
+        "xAxisProperty": "payload.x",
+        "xAxisPropertyType": "msg",
+        "xAxisType": "time",
+        "xAxisFormat": "",
+        "xAxisFormatType": "auto",
+        "xmin": "",
+        "xmax": "",
+        "yAxisLabel": "",
+        "yAxisProperty": "payload.y",
+        "yAxisPropertyType": "msg",
+        "ymin": "",
+        "ymax": "",
+        "bins": 10,
+        "action": "append",
+        "stackSeries": false,
+        "pointShape": "circle",
+        "pointRadius": "5",
+        "showLegend": false,
+        "removeOlder": "20",
+        "removeOlderUnit": "86400",
+        "removeOlderPoints": "1000",
+        "colors": [
+            "#a347e1",
+            "#ff0000",
+            "#ff7f0e",
+            "#2ca02c",
+            "#a347e1",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "textColor": [
+            "#b2bdcd"
+        ],
+        "textColorDefault": false,
+        "gridColor": [
+            "#334155"
+        ],
+        "gridColorDefault": false,
+        "width": "8",
+        "height": 8,
+        "className": "nominal",
+        "interpolation": "linear",
+        "x": 580,
+        "y": 1040,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "74447eda6ef7610e",
+        "type": "function",
+        "z": "9a5b7c78db521126",
+        "name": "chart_parse",
+        "func": "let data = msg.payload;\n\ndata.forEach(p => {\n    node.send({\n        topic: \"TempInterna\",\n        payload: {\n            x: new Date(p.time).getTime(),\n            y: p.mean\n        }\n    });\n});\n\nreturn null;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 310,
+        "y": 1040,
+        "wires": [
+            [
+                "b3b8622f8fef4163"
+            ]
+        ]
+    },
+    {
+        "id": "9a6ef68c1a39c046",
+        "type": "ui-button",
+        "z": "9a5b7c78db521126",
+        "group": "f4c9001a65353143",
+        "name": "",
+        "label": "Update ",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "emulateClick": false,
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "update",
+        "iconPosition": "left",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "buttonColor": "",
+        "textColor": "",
+        "iconColor": "",
+        "enableClick": true,
+        "enablePointerdown": false,
+        "pointerdownPayload": "",
+        "pointerdownPayloadType": "str",
+        "enablePointerup": false,
+        "pointerupPayload": "",
+        "pointerupPayloadType": "str",
+        "x": 80,
+        "y": 720,
+        "wires": [
+            [
+                "1f4e39a3b05d7946",
+                "594409a0c985a278",
+                "8ca1c8d74ecc551e",
+                "4789d20316e460ed"
+            ]
+        ]
+    },
+    {
+        "id": "7d21f27807598701",
+        "type": "influxdb",
+        "hostname": "localhost",
+        "port": 8086,
+        "protocol": "http",
+        "database": "sensores",
+        "name": "sensoresDB",
+        "usetls": false,
+        "tls": "",
+        "influxdbVersion": "1.x",
+        "url": "http://localhost:8086",
+        "timeout": 10,
+        "rejectUnauthorized": true
+    },
+    {
+        "id": "f4c9001a65353143",
+        "type": "ui-group",
+        "name": "Historial",
+        "page": "94179fb4d1fb0332",
+        "width": "8",
+        "height": 1,
+        "order": 2,
+        "showTitle": true,
+        "className": "",
+        "visible": "true",
+        "disabled": "false",
+        "groupType": "default"
+    },
+    {
+        "id": "94179fb4d1fb0332",
+        "type": "ui-page",
+        "name": "DigitalTwing",
+        "ui": "cbbd1cc92fcb396f",
+        "path": "/page2",
+        "icon": "home",
+        "layout": "grid",
+        "theme": "f02a11f7805b7d7c",
+        "breakpoints": [
+            {
+                "name": "Default",
+                "px": "0",
+                "cols": "8"
+            },
+            {
+                "name": "Tablet",
+                "px": "576",
+                "cols": "8"
+            },
+            {
+                "name": "Small Desktop",
+                "px": "768",
+                "cols": "9"
+            },
+            {
+                "name": "Desktop",
+                "px": "1024",
+                "cols": "12"
+            }
+        ],
+        "order": 2,
+        "className": "",
+        "visible": "true",
+        "disabled": "false"
+    },
+    {
+        "id": "cbbd1cc92fcb396f",
+        "type": "ui-base",
+        "name": "My Dashboard",
+        "path": "/dashboard",
+        "appIcon": "",
+        "includeClientData": true,
+        "acceptsClientConfig": [
+            "ui-notification",
+            "ui-control"
+        ],
+        "showPathInSidebar": false,
+        "headerContent": "page",
+        "navigationStyle": "default",
+        "titleBarStyle": "default",
+        "showReconnectNotification": true,
+        "notificationDisplayTime": 1,
+        "showDisconnectNotification": true,
+        "allowInstall": false
+    },
+    {
+        "id": "f02a11f7805b7d7c",
+        "type": "ui-theme",
+        "name": "Theme Name",
+        "colors": {
+            "surface": "#1e293b",
+            "primary": "#0094ce",
+            "bgPage": "#0f172a",
+            "groupBg": "#1e293b",
+            "groupOutline": "#334155"
+        },
+        "sizes": {
+            "density": "compact",
+            "pagePadding": "12px",
+            "groupGap": "12px",
+            "groupBorderRadius": "4px",
+            "widgetGap": "12px"
+        }
+    },
+    {
+        "id": "89ca3b6a1c42d976",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-contrib-influxdb": "0.7.0",
+            "@flowfuse/node-red-dashboard": "1.30.2"
+        }
+    }
+]

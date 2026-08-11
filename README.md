@@ -4,14 +4,17 @@
 
 Development of a simplified, physics-based digital twin for a three-phase distribution transformer.
 
+The project was developed as a way to generate representative electrical and thermal data for a transformer in the absence of a sufficiently large real-world dataset. The generated data was intended to provide a basis for developing and testing predictive models for transformer operating conditions and potential failure or risk detection.
+
 The system combines real environmental measurements from a physical sensor node with engineering-based models to estimate the electrical and thermal behavior of a transformer that is not directly instrumented.
 
 The digital twin was implemented using Node-RED as the processing and integration environment, with InfluxDB for time-series storage and Node-RED Dashboard 2.0 for real-time visualization and historical analysis.
 
 The project was designed as an extension of the physical sensing system developed in the related **Low-Power LoRa Sensor Node** project.
 
+
 <p align="center">
-  <img src="docs/images/dash01.png" alt="Industrial Transformer Digital Twin dashboard" width="850">
+  <img src="docs/images/dash01.png" alt="Industrial Transformer Digital Twin dashboard" width="500">
 </p>
 
 <p align="center">
@@ -243,7 +246,7 @@ The stored variables include:
 Historical data can be queried and aggregated over time to generate hourly trends for the main transformer variables.
 
 <p align="center">
-  <img src="docs/images/dash02.png" alt="Historical transformer data" width="850">
+  <img src="docs/images/flow-dash02.png" alt="Historical transformer data" width="800">
 </p>
 
 <p align="center">
@@ -301,9 +304,10 @@ Data Processing
 ```
 
 <p align="center">
-  <img src="docs/images/flow01.png" alt="Node-RED digital twin flow" width="1000">
+  <img src="docs/images/flow-dash01.png" alt="Node-RED digital twin flow" width="600">
 </p>
-
+<p align="center">
+</p>
 <p align="center">
   <i>Main Node-RED flow implementing the digital twin.</i>
 </p>
