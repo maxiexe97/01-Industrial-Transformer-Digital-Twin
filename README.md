@@ -246,7 +246,7 @@ The stored variables include:
 Historical data can be queried and aggregated over time to generate hourly trends for the main transformer variables.
 
 <p align="center">
-  <img src="docs/images/flow-dash02.png" alt="Historical transformer data" width="800">
+  <img src="docs/images/flow-dash02.png" alt="Historical transformer data" width="900">
 </p>
 
 <p align="center">
@@ -304,7 +304,7 @@ Data Processing
 ```
 
 <p align="center">
-  <img src="docs/images/flow-dash01.png" alt="Node-RED digital twin flow" width="600">
+  <img src="docs/images/flow-dash01.png" alt="Node-RED digital twin flow" width="900">
 </p>
 <p align="center">
 </p>
